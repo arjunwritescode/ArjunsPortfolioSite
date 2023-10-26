@@ -19,6 +19,8 @@ This is a personal portfolio website created using HTML, CSS and JavaScript only
 
 ## Demo
 https://arjunwritescode.github.io
+This is the link for the website
+
 https://clipchamp.com/watch/1Etdc7unNVM
 
 The link contains a comprehensive subtitled video showcasing my portfolio website and its features.
