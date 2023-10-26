@@ -18,8 +18,7 @@ This is a personal portfolio website created using HTML, CSS and JavaScript only
 
 
 ## Demo
-https://arjunwritescode.github.io
-This is the link for the website
+https://arjunwritescode.github.io ||
 
 https://clipchamp.com/watch/1Etdc7unNVM
 
