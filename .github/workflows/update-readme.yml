@@ -1,8 +1,8 @@
-name: Daily README Update
+name: Daily Random README Commits
 
 on:
   schedule:
-    - cron: "0 0 * * *"  # Every day at 00:00 UTC
+    - cron: "0 0 * * *"
   workflow_dispatch:
 
 jobs:
@@ -18,13 +18,20 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Run the update script
-        run: python update_readme.py
+      - name: Run the README update script
+        id: update_script
+        run: |
+          python update_readme.py > commit_script.sh
+          chmod +x commit_script.sh
+          cat commit_script.sh
 
-      - name: Commit and Push changes
+      - name: Configure Git
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          git add README.md
-          git commit -m "🤖 Auto-update README [skip ci]" || echo "No changes"
+
+      - name: Execute Commits
+        run: |
+          bash commit_script.sh
           git push
+
