@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Set up Python
@@ -18,8 +18,7 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Run the README update script
-        id: update_script
+      - name: Run the update script
         run: |
           python update_readme.py > commit_script.sh
           chmod +x commit_script.sh
@@ -30,8 +29,7 @@ jobs:
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
 
-      - name: Execute Commits
+      - name: Run generated commit script
         run: |
           bash commit_script.sh
           git push
-
