@@ -5,6 +5,9 @@ on:
     - cron: "0 0 * * *"
   workflow_dispatch:
 
+permissions:
+  contents: write  # ⬅️ REQUIRED to allow pushing
+
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -22,14 +25,13 @@ jobs:
         run: |
           python update_readme.py > commit_script.sh
           chmod +x commit_script.sh
-          cat commit_script.sh
 
       - name: Configure Git
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
 
-      - name: Run generated commit script
+      - name: Run commit script and push
         run: |
           bash commit_script.sh
-          git push
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:main
