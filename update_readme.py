@@ -1,38 +1,29 @@
 import random
+import string
 import time
 from datetime import datetime
 
-EMOJIS = ["🚀", "✨", "🔥", "💡", "📌", "🌟", "🛠️", "✅", "🎯", "📈"]
-SPACES = ["", " ", "  ", "   ", "    "]
+FILENAME = "README.md"
 
-def make_random_change():
-    with open("README.md", "r", encoding="utf-8") as f:
-        content = f.readlines()
-
-    # Choose a random line and modify it slightly
-    if content:
-        line_to_modify = random.randint(0, len(content)-1)
-        change = random.choice(SPACES + EMOJIS)
-        content[line_to_modify] = content[line_to_modify].rstrip() + change + "\n"
-    else:
-        content = [f"# Random README update {random.choice(EMOJIS)}\n"]
-
-    with open("README.md", "w", encoding="utf-8") as f:
-        f.writelines(content)
-
-# Initial timestamp for the day
-with open("README.md", "w", encoding="utf-8") as f:
+# Start fresh header
+with open(FILENAME, "w", encoding="utf-8") as f:
     f.write(f"# 🚀 Automated README Update\n\n")
     f.write(f"⏰ Last updated on: **{datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC**\n\n")
 
-# Perform 1 to 5 tiny changes + commit shell commands
-num_changes = random.randint(1, 5)
+# Emoji and whitespace pool
+EMOJIS = ["🚀", "✨", "🔥", "💡", "📌", "🌟", "🛠️", "✅", "🎯", "📈"]
+SPACES = [" ", "  ", "   ", "    "]
 
-for i in range(num_changes):
-    make_random_change()
+# Number of commits for the day
+num_commits = random.randint(1, 5)
 
-    # Write shell commands to commit each change individually
-    print(f"echo Commit {i+1}")
+for i in range(num_commits):
+    # Open and read
+    with open(FILENAME, "a", encoding="utf-8") as f:
+        rand_char = random.choice(EMOJIS + SPACES + list(string.ascii_letters))
+        f.write(f"\n<!-- noise-{i+1} {rand_char} -->\n")
+
+    print(f"echo 'Commit {i+1}'")
     print("git add README.md")
-    print(f"git commit -m '🤖 Auto commit #{i+1}' || echo 'No changes'")
+    print(f"git commit -m '🤖 Auto noise commit #{i+1}' || echo 'No changes'")
     time.sleep(1)
