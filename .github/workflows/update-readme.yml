@@ -6,32 +6,37 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write  # ⬅️ REQUIRED to allow pushing
+  contents: write
 
 jobs:
   update:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          python-version: '3.10'
+          persist-credentials: true  # keep GITHUB_TOKEN for pushing
 
-      - name: Run the update script
+      - name: Set commit identity to YOU
         run: |
-          python update_readme.py > commit_script.sh
-          chmod +x commit_script.sh
+          git config user.name "arjunwritescode"
+          git config user.email "arjunveersinghrathore17@gmail.com"  # <-- replace with your exact noreply or verified email
 
-      - name: Configure Git
+      - name: Make 1–5 tiny commits
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
+          n=$(( (RANDOM % 5) + 1 ))
+          echo "Will make $n commits"
+          for i in $(seq 1 $n); do
+            echo "<!-- noise-$i $(date +%s) -->" >> auto_commit_log.txt
 
-      - name: Run commit script and push
-        run: |
-          bash commit_script.sh
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:main
+            # Stage and commit with explicit author (belt & suspenders)
+            git add auto_commit_log.txt
+            git commit \
+              --author="Arjun Rathore <arjunveersinghrathore17@gmail.com>" \
+              -m "🤖 Auto noise commit #$i"
+
+            # Push to the default branch
+            git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" HEAD:main
+            sleep 2
+          done
